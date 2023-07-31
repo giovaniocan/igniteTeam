@@ -1,10 +1,10 @@
-import * as S from './styles';
+import { Container, Title } from "./styles";
 
 export function Groups() {
   return (
-    <S.Container>
-      <S.Title>Open up App.js to start working on your app!</S.Title>
-    </S.Container>
+    <Container>
+      <Title>Open up App.js to start working on your app!</Title>
+    </Container>
   );
 }
 
