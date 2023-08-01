@@ -6,6 +6,7 @@ import { HighLight } from "@components/HighLight";
 import { useState } from "react";
 import { FlatList } from "react-native";
 import { ListEmpety } from "@components/ListEmpety";
+import { Button } from "@components/Button";
 
 export function Groups() {
   const [groups, setGroups] = useState<string[]>([])
@@ -29,6 +30,8 @@ export function Groups() {
           <ListEmpety message="que tal cadastrar a primeira turma?" />
         )}
      />
+
+     <Button title="Criar nova turma" />
 
     </Container>
   );
