@@ -18,9 +18,11 @@ import { Filter } from "@components/Filter";
 import { PlayerCard } from "@components/PlayerCard";
 import { ListEmpety } from "@components/ListEmpety";
 import { Button } from "@components/Button";
+import { Loading } from "@components/Loading";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { groupRemoveByName } from "@storage/group/groupRemoveByName";
+
 
 
 
@@ -29,6 +31,8 @@ type RouteParams = {
 }
 
 export function Players(){
+    const [isLoading, setIsLoading] = useState(true)
+
     const [newPlayerName, setNewPlayerName] = useState('')
 
     const [team, setTeam] = useState('time a')
@@ -75,11 +79,16 @@ export function Players(){
 
     async function fetchPlayersByTeam(){
         try {
+            setIsLoading(true)
+
            const playersByTeam = await playersGetByGroupAdnTeam(group, team)
            setPlayers(playersByTeam)
+        
         } catch (error) {
             console.log(error)
             Alert.alert('Time', 'não foi possivel carregar as pessoas')
+        } finally{
+            setIsLoading(false) // terminou de carregar o  loading sai
         }
     }
 
@@ -165,6 +174,9 @@ export function Players(){
                 </NumberOfPlayers>
             </HeaderList>
 
+            {
+                isLoading ? <Loading /> : 
+
             <FlatList
                 data={players}
                 keyExtractor={item => item.name}
@@ -183,6 +195,9 @@ export function Players(){
                     players.length === 0 && {flex:1}
                 ]}
             />
+
+            }
+
 
             <Button 
                 title="Remover turma"

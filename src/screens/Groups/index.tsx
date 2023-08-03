@@ -10,11 +10,15 @@ import { HighLight } from "@components/HighLight";
 import { GroupCard } from "@components/GroupCard";
 import { ListEmpety } from "@components/ListEmpety";
 import { Button } from "@components/Button";
+import { Loading } from "@components/Loading";
 
 
 
 export function Groups() {
   const [groups, setGroups] = useState<string[]>([])
+
+  const [isLoading, setIsLoading] = useState(true)
+
 
   const navigation = useNavigation()
 
@@ -27,14 +31,18 @@ export function Groups() {
   async function fetchGroups() {
     try {
 
+      setIsLoading(true)
       const data = await groupsGetAll()
 
       setGroups(data)
-      
+
+
     } catch (error) {
 
       console.log(error)
 
+    } finally{
+      setIsLoading(false)
     }
   }
 
@@ -54,6 +62,9 @@ export function Groups() {
 
      <HighLight  title="Turmas" subtitle="Jogue com a sua turma " />
 
+     {
+      isLoading ? <Loading /> : 
+
      <FlatList
         data={groups}
         keyExtractor={item => item}
@@ -69,6 +80,9 @@ export function Groups() {
         )}
         showsHorizontalScrollIndicator={false}
      />
+
+    }
+
 
      <Button
         title="Criar nova turma"
