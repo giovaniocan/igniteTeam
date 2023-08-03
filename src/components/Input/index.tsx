@@ -7,7 +7,7 @@ export function Input({...rest}: TextInputProps){
 
     return(
         <Container
-        placeholderTextColor={COLORS.GRAY_300}
+             placeholderTextColor={COLORS.GRAY_300}
             {...rest}
         />
     )

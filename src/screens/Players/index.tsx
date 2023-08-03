@@ -1,5 +1,5 @@
 import { useRoute } from "@react-navigation/native";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { useState } from "react";
 
 import { Header } from "@components/Header";
@@ -12,19 +12,52 @@ import { ListEmpety } from "@components/ListEmpety";
 import { Button } from "@components/Button";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { playerAddByGroup } from "@storage/player/playersAddByGroup";
+import { playersGetByGroup } from "@storage/player/playersGetByGroup";
+import { AppError } from "@utils/AppError";
 
 type RouteParams = {
     group: string;
 }
 
 export function Players(){
+    const [newPlayerName, setNewPlayerName] = useState('')
+
     const [team, setTeam] = useState('time a')
 
-    const [players, setPlayers] = useState(['Giovani', 'João', 'Maca'])
+    const [players, setPlayers] = useState([])
 
     const route = useRoute()
     const { group } = route.params as RouteParams;
 
+    async function handleAddPlayer(){
+        if(newPlayerName.trim().length  === 0){
+            return Alert.alert('Nova pessoa', 'informe o nome da pessoa para adicionar')
+        }
+        
+        
+        const newPlayer = {
+            name: newPlayerName,
+            team,
+        }
+
+        try {
+            
+           await playerAddByGroup(newPlayer, group)
+
+           const player = await playersGetByGroup(group)
+            console.log(player)
+
+        } catch (error) {
+            if(error instanceof AppError){
+                Alert.alert('Nova pessoa', error.message)
+            }else{
+                console.log(error)
+                Alert.alert('Nova pessoa', 'ocorreu um erro inesperado')
+            }
+        }
+    }
+    
 
     return(
         <Container>
@@ -37,11 +70,15 @@ export function Players(){
 
             <Form>
                 <Input 
+                    onChangeText={setNewPlayerName}
                     placeholder="Nome da pessoa"
                     autoCorrect={false} // para o corretor nao ficar tentando corrigir o nome da pessoa
                 />
 
-                <ButtonIcon icon="add" />
+                <ButtonIcon
+                     icon="add"
+                     onPress={handleAddPlayer}
+                 />
             </Form>
 
             <HeaderList>
