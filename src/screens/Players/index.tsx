@@ -1,4 +1,4 @@
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Alert, FlatList, TextInput } from "react-native";
 import { useEffect, useRef, useState } from "react";
 
@@ -20,6 +20,7 @@ import { ListEmpety } from "@components/ListEmpety";
 import { Button } from "@components/Button";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { groupRemoveByName } from "@storage/group/groupRemoveByName";
 
 
 
@@ -39,9 +40,11 @@ export function Players(){
 
     const newPlayerNameInput = useRef<TextInput>(null)
 
+    const navigation = useNavigation()
+
     async function handleAddPlayer(){
         if(newPlayerName.trim().length  === 0){
-            return Alert.alert('Nova pessoa', 'informe o nome da pessoa para adicionar')
+            return Alert.alert('New player', 'informe o nome da pessoa para adicionar')
         }
         
         
@@ -89,6 +92,26 @@ export function Players(){
         } catch (error) {
             Alert.alert('Time', 'não foi possivel remover a pessoa')
         }
+    }
+
+    async function groupRemove(){
+        try {
+            await groupRemoveByName(group)
+            navigation.navigate('groups')
+        } catch (error) {
+            Alert.alert('Remover grupo', 'It was not possible to remove the group')
+        }
+    }
+
+    async function handleGroupRemove(){
+        Alert.alert(
+            'Remove', 
+            'do you really wanna remove the group? ',
+            [
+                {text: 'No', style:'cancel'},
+                {text: 'Yes', onPress: async () => groupRemove() }
+            ]
+         )
     }
 
     useEffect(() => {
@@ -164,6 +187,7 @@ export function Players(){
             <Button 
                 title="Remover turma"
                 type="SECONDARY"    
+                onPress={handleGroupRemove}
             />
             
         </Container>
