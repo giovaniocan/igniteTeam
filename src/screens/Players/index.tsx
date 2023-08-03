@@ -1,6 +1,12 @@
 import { useRoute } from "@react-navigation/native";
 import { Alert, FlatList } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+
+import { playerAddByGroup } from "@storage/player/playersAddByGroup";
+import { playersGetByGroupAdnTeam } from "@storage/player/playersGetByGroupAndTeam";
+import { AppError } from "@utils/AppError";
+import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
 
 import { Header } from "@components/Header";
 import { HighLight } from "@components/HighLight";
@@ -12,9 +18,8 @@ import { ListEmpety } from "@components/ListEmpety";
 import { Button } from "@components/Button";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
-import { playerAddByGroup } from "@storage/player/playersAddByGroup";
-import { playersGetByGroup } from "@storage/player/playersGetByGroup";
-import { AppError } from "@utils/AppError";
+
+
 
 type RouteParams = {
     group: string;
@@ -25,7 +30,7 @@ export function Players(){
 
     const [team, setTeam] = useState('time a')
 
-    const [players, setPlayers] = useState([])
+    const [players, setPlayers] = useState<PlayerStorageDTO[]>([])
 
     const route = useRoute()
     const { group } = route.params as RouteParams;
@@ -44,9 +49,7 @@ export function Players(){
         try {
             
            await playerAddByGroup(newPlayer, group)
-
-           const player = await playersGetByGroup(group)
-            console.log(player)
+           fetchPlayersByTeam()
 
         } catch (error) {
             if(error instanceof AppError){
@@ -57,7 +60,20 @@ export function Players(){
             }
         }
     }
-    
+
+    async function fetchPlayersByTeam(){
+        try {
+           const playersByTeam = await playersGetByGroupAdnTeam(group, team)
+           setPlayers(playersByTeam)
+        } catch (error) {
+            console.log(error)
+            Alert.alert('Time', 'não foi possivel carregar as pessoas')
+        }
+    }
+
+    useEffect(() => {
+        fetchPlayersByTeam()
+    }, [team])    
 
     return(
         <Container>
@@ -103,10 +119,10 @@ export function Players(){
 
             <FlatList
                 data={players}
-                keyExtractor={item => item}
+                keyExtractor={item => item.name}
                 renderItem={({item}) => (
                     <PlayerCard
-                         name={item}
+                         name={item.name}
                          onRemove={() => {}}
                      />
                 )}
