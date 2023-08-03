@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
-import { Alert, FlatList } from "react-native";
-import { useEffect, useState } from "react";
+import { Alert, FlatList, TextInput } from "react-native";
+import { useEffect, useRef, useState } from "react";
 
 
 import { playerAddByGroup } from "@storage/player/playersAddByGroup";
@@ -35,6 +35,8 @@ export function Players(){
     const route = useRoute()
     const { group } = route.params as RouteParams;
 
+    const newPlayerNameInput = useRef<TextInput>(null)
+
     async function handleAddPlayer(){
         if(newPlayerName.trim().length  === 0){
             return Alert.alert('Nova pessoa', 'informe o nome da pessoa para adicionar')
@@ -49,6 +51,11 @@ export function Players(){
         try {
             
            await playerAddByGroup(newPlayer, group)
+
+           newPlayerNameInput.current?.blur()
+
+           setNewPlayerName('')
+
            fetchPlayersByTeam()
 
         } catch (error) {
@@ -89,6 +96,11 @@ export function Players(){
                     onChangeText={setNewPlayerName}
                     placeholder="Nome da pessoa"
                     autoCorrect={false} // para o corretor nao ficar tentando corrigir o nome da pessoa
+                    value={newPlayerName}
+                    inputRef={newPlayerNameInput}
+
+                    onSubmitEditing={handleAddPlayer}//quandoa gente clica no 'confirmar' do tecldo para efetuar a acao
+                    returnKeyType="done"
                 />
 
                 <ButtonIcon
