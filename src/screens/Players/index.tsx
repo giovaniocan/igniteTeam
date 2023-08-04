@@ -35,7 +35,7 @@ export function Players(){
 
     const [newPlayerName, setNewPlayerName] = useState('')
 
-    const [team, setTeam] = useState('time a')
+    const [team, setTeam] = useState('team a')
 
     const [players, setPlayers] = useState<PlayerStorageDTO[]>([])
 
@@ -86,7 +86,7 @@ export function Players(){
         
         } catch (error) {
             console.log(error)
-            Alert.alert('Time', 'não foi possivel carregar as pessoas')
+            Alert.alert('Team', 'it was not possible to get the players')
         } finally{
             setIsLoading(false) // terminou de carregar o  loading sai
         }
@@ -108,7 +108,7 @@ export function Players(){
             await groupRemoveByName(group)
             navigation.navigate('groups')
         } catch (error) {
-            Alert.alert('Remover grupo', 'It was not possible to remove the group')
+            Alert.alert('Remove team', 'It was not possible to remove the team')
         }
     }
 
@@ -133,13 +133,14 @@ export function Players(){
 
             <HighLight
                 title={group}
-                subtitle="adicione a galera e separe os times"    
+                subtitle="
+                add the guys and separate the teams"    
             />
 
             <Form>
                 <Input 
                     onChangeText={setNewPlayerName}
-                    placeholder="Nome da pessoa"
+                    placeholder="Persons name"
                     autoCorrect={false} // para o corretor nao ficar tentando corrigir o nome da pessoa
                     value={newPlayerName}
                     inputRef={newPlayerNameInput}
@@ -157,7 +158,7 @@ export function Players(){
             <HeaderList>
 
                 <FlatList
-                    data={['time a', 'time b']}
+                    data={['team a', 'team b']}
                     keyExtractor={item => item}
                     renderItem={({item}) => (
                         <Filter
@@ -187,7 +188,7 @@ export function Players(){
                      />
                 )}
                 ListEmptyComponent={() => (
-                    <ListEmpety message="não há pessoas nesse time" />
+                    <ListEmpety message="there are no players yet in this group" />
                   )}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={[
@@ -200,7 +201,7 @@ export function Players(){
 
 
             <Button 
-                title="Remover turma"
+                title="Remove team"
                 type="SECONDARY"    
                 onPress={handleGroupRemove}
             />

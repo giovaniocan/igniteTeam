@@ -60,7 +60,7 @@ export function Groups() {
     <Container>
      <Header />
 
-     <HighLight  title="Turmas" subtitle="Jogue com a sua turma " />
+     <HighLight  title="Team" subtitle="Play with your friends" />
 
      {
       isLoading ? <Loading /> : 
@@ -76,7 +76,7 @@ export function Groups() {
         )}
         contentContainerStyle={groups.length === 0 && {flex:1} }
         ListEmptyComponent={() => (
-          <ListEmpety message="que tal cadastrar a primeira turma?" />
+          <ListEmpety message="How about signing up for the first class?" />
         )}
         showsHorizontalScrollIndicator={false}
      />
@@ -85,7 +85,7 @@ export function Groups() {
 
 
      <Button
-        title="Criar nova turma"
+        title="Create a new team"
         onPress={handleNewGroup}
      />
 

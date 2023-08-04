@@ -18,7 +18,7 @@ export function NewGroup(){
     try {
 
         if(group.trim().length === 0){
-            return Alert.alert('Novo Grupo', 'Informe o nome da turma')
+            return Alert.alert('New Group', 'Please, type the name of the team')
         }
 
         await  groupCreate(group)   
@@ -26,9 +26,9 @@ export function NewGroup(){
 
     } catch (error) {
         if(error instanceof AppError){
-            Alert.alert('Novo Grupo', error.message)
+            Alert.alert('New Team', error.message)
         }else{
-            Alert.alert('Novo Grupo', 'Nao foi possivel criar um novo grupo')
+            Alert.alert('New Team', 'It was not possible to create a new team')
             console.log(error)
         }
 
@@ -44,17 +44,17 @@ export function NewGroup(){
                 <Icon />
 
                 <HighLight
-                     title="Nova turma"
-                     subtitle="crie a turma para adicionar as pessoas"
+                     title="New team"
+                     subtitle="Create a team to add people"
                  />
 
                  <Input
-                    placeholder="Nome da turma"
+                    placeholder="Name of the team"
                     onChangeText={setGroup}
                  />
 
                 <Button
-                    title="Criar"
+                    title="Create"
                     style={{marginTop:20}}
                     onPress={handleNew}
                 />
